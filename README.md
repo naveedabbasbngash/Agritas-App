@@ -11,22 +11,6 @@ The Agritas Flutter App allows users to view and manage a list of agricultural p
 The project follows the MVVM architecture, dividing the code into logical layers:
 
 
-├── main.dart # Entry point of the application
-├── models # Data models representing the application entities
-│ ├── product.dart # Defines the Product data model
-│ └── category.dart # Defines the Category data model
-├── viewmodels # Manages data and business logic
-│ └── product_viewmodel.dart # Product ViewModel
-├── views # UI components of the application
-│ ├── product_list_view.dart # Displays a list of products
-│ └── product_details_view.dart # Displays details of a single product
-├── services # API and data services
-│ └── product_api.dart # Handles API interactions for products
-└── utils # Utility classes and functions
-├── local_storage.dart # Manages local storage for offline support
-├── custom_widgets.dart # Contains reusable widgets
-├── app_utils.dart # General utility functions
-└── validation.dart # Validation functions
 
 
 ## Getting Started
