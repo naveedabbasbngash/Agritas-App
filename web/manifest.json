@@ -1,0 +1,35 @@
+{
+    "name": "agritas_app",
+    "short_name": "agritas_app",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "Agritas forwardly integrated back in 2017 from a multi marketing agricultural group, involve in almost all different segments of the industry, as the group belief in overall integration of the industry. By the grace of Almighty Allah, the directors of Agritas led by the Chairman through their right decisions has bring it to the place where today it is in a couple of years.  Strong market network and reputation along with multi marketing activities of AGRITAS has become a competitive advantage, also by providing unique formulations and quality goods under a thoroughly supervision of its total quality management and formulators.  Agritas is highly concerned to meet and exceed customers satisfaction by providing standard goods efficiently. And what makes the firm different is its product line and width in all different aspects of the industry (Pesticide, Herbicide, Fungicide, Micro Nutrient, Equipments and Seeds).",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
