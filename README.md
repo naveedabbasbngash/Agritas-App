@@ -1,16 +1,45 @@
-# agritas_app
+# Agritas Flutter App
 
-Agritas forwardly integrated back in 2017 from a multi marketing agricultural group, involve in almost all different segments of the industry, as the group belief in overall integration of the industry. By the grace of Almighty Allah, the directors of Agritas led by the Chairman through their right decisions has bring it to the place where today it is in a couple of years.  Strong market network and reputation along with multi marketing activities of AGRITAS has become a competitive advantage, also by providing unique formulations and quality goods under a thoroughly supervision of its total quality management and formulators.  Agritas is highly concerned to meet and exceed customers satisfaction by providing standard goods efficiently. And what makes the firm different is its product line and width in all different aspects of the industry (Pesticide, Herbicide, Fungicide, Micro Nutrient, Equipments and Seeds).
+This project is a Flutter application developed using the MVVM (Model-View-ViewModel) architecture. It demonstrates a real-world implementation for managing agricultural products.
+
+## Project Overview
+
+The Agritas Flutter App allows users to view and manage a list of agricultural products categorized under various categories like Fungicide, Herbicide, etc. It includes features such as offline caching, API integration, and image caching for efficient performance.
+
+## Project Structure
+
+The project follows the MVVM architecture, dividing the code into logical layers:
+
+
+├── main.dart # Entry point of the application
+├── models # Data models representing the application entities
+│ ├── product.dart # Defines the Product data model
+│ └── category.dart # Defines the Category data model
+├── viewmodels # Manages data and business logic
+│ └── product_viewmodel.dart # Product ViewModel
+├── views # UI components of the application
+│ ├── product_list_view.dart # Displays a list of products
+│ └── product_details_view.dart # Displays details of a single product
+├── services # API and data services
+│ └── product_api.dart # Handles API interactions for products
+└── utils # Utility classes and functions
+├── local_storage.dart # Manages local storage for offline support
+├── custom_widgets.dart # Contains reusable widgets
+├── app_utils.dart # General utility functions
+└── validation.dart # Validation functions
+
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Follow these instructions to get a copy of the project up and running on your local machine.
 
-A few resources to get you started if this is your first Flutter project:
+### Prerequisites
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter SDK**: [Installation Guide](https://flutter.dev/docs/get-started/install)
+- **Android Studio** or **Visual Studio Code** for development.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone git@github.com:naveedabbasbngsh/Agritas-App.git
