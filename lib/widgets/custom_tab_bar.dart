@@ -17,8 +17,26 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine the maximum width based on the largest tab
+    double maxWidth = 0;
+    for (var tab in tabs) {
+      final textPainter = TextPainter(
+        text: (tab as Text).data != null ? TextSpan(text: tab.data) : TextSpan(text: ''),
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+      )..layout(minWidth: 0, maxWidth: double.infinity);
+      final width = textPainter.size.width;
+      if (width > maxWidth) {
+        maxWidth = width;
+      }
+    }
+
+    // Add some padding to the calculated max width for better spacing
+    maxWidth += 32.0; // 16dp padding on each side
+
     return Container(
-      height: 40, // Fixed height for the TabBar
+      height: 50, // Fixed height for the TabBar
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: tabs.length,
@@ -33,7 +51,8 @@ class CustomTabBar extends StatelessWidget {
               duration: Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               margin: EdgeInsets.symmetric(horizontal: 8.0),
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              width: maxWidth, // Set the width to the maximum calculated width
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: isSelected ? selectedColor : unselectedColor,
                 borderRadius: BorderRadius.circular(20),
@@ -42,7 +61,6 @@ class CustomTabBar extends StatelessWidget {
                   width: 2.0,
                 ),
               ),
-              alignment: Alignment.center,
               child: DefaultTextStyle(
                 style: TextStyle(
                   color: isSelected ? Colors.white : Colors.grey, // White for active, gray for inactive

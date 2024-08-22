@@ -1,12 +1,13 @@
+import 'package:agritas_app/utils/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'viewmodels/product_viewmodel.dart';
 import 'viewmodels/language_viewmodel.dart';
-import 'views/product_list_view.dart';
 import 'views/language_selection_view.dart';
 import 'models/product.dart';
 import 'models/category.dart';
@@ -35,13 +36,27 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider<LanguageViewModel>(create: (_) => LanguageViewModel()),
       ],
-      child: MaterialApp(
-        title: 'Haryali Markaz',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: LanguageSelectionView(),
+      child: Consumer<LanguageViewModel>(
+        builder: (context, languageViewModel, child) {
+          return MaterialApp(
+            title: 'Haryali Markaz',
+            theme: ThemeData(
+              primarySwatch: Colors.green,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            locale: Locale(languageViewModel.selectedLanguage),
+            supportedLocales: [
+              Locale('en', ''), // English
+              Locale('ur', ''), // Urdu
+            ],
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: DashboardView(),
+          );
+        },
       ),
     );
   }

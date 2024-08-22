@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/product.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/language_viewmodel.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -9,98 +11,118 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageViewModel = Provider.of<LanguageViewModel>(context);
+    final isUrdu = languageViewModel.selectedLanguage == 'ur';
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjust vertical padding if needed
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.0), // No border radius for full-width effect
+          borderRadius: BorderRadius.circular(12.0),
         ),
         color: Colors.white,
-        elevation: 4, // Shadow for the card
-        margin: EdgeInsets.zero, // Ensure the card touches the left and right edges
+        elevation: 6,
         child: Container(
-          height: 180, // Increase the overall height of the card by approximately 10%
-          padding: const EdgeInsets.symmetric(horizontal: 20.0), // Padding for content within the card
+          height: 180,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Container(
-                  color: Color(0xFF0fa065),
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: CachedNetworkImage(
-                    imageUrl: 'https://www.agritas.com.pk/${product.imageUrl}',
-                    width: 70,  // Smaller width for the image
-                    height: 120, // Increased height for the image
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(
-                      child: SizedBox(
-                        width: 10,
-                        height: 10,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Color(0xFF0fa065),
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/product_place_holder.png',
-                      width: 50,
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
+              _buildProductImage(),
               SizedBox(width: 16.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center, // Centers the text vertically
-                  children: [
-                    Text(
-                      product.productName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      "Fresh from sea", // Placeholder for the description
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    SizedBox(height: 20.0), // 20sp gap between description and pack size
-                    Text(
-                      product.packSize,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    SizedBox(height: 4.0),
-                    Text(
-                      "1KG",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Color(0xFF0fa065),
-                  size: 24.0,
-                ),
-              ),
+              _buildProductDetails(context, isUrdu),
+              _buildArrowIcon(isUrdu),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProductImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: Container(
+        color: Color(0xFF0fa065),
+        padding: EdgeInsets.all(12.0),
+        child: CachedNetworkImage(
+          imageUrl: 'https://www.agritas.com.pk/${product.imageUrl}',
+          width: 70,
+          height: 120,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/images/product_place_holder.png',
+            width: 70,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductDetails(BuildContext context, bool isUrdu) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            isUrdu ? product.urProductName : product.productName,
+            style: textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 8.0),
+          Text(
+            isUrdu ? product.compositionUr : product.composition,
+            style: textTheme.bodyMedium?.copyWith(
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            product.packSize,
+            style: textTheme.bodySmall?.copyWith(
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(height: 4.0),
+          const Text(
+            "1KG",
+            style: TextStyle(
+              color: Colors.blue,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.start,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildArrowIcon(bool isUrdu) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Icon(
+        isUrdu ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
+        color: Color(0xFF0fa065),
+        size: 24.0,
       ),
     );
   }

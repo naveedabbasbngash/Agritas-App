@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/product_viewmodel.dart';
+import '../viewmodels/language_viewmodel.dart';
 import '../widgets/custom_tab_bar.dart';
 import '../widgets/header.dart';
 import '../widgets/product_card.dart';
@@ -47,6 +48,7 @@ class _ProductListViewState extends State<ProductListView> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ProductViewModel>(context);
+    final languageModel = Provider.of<LanguageViewModel>(context);
 
     if (_tabController == null || viewModel.categories.isEmpty) {
       return Scaffold(
@@ -62,11 +64,11 @@ class _ProductListViewState extends State<ProductListView> with SingleTickerProv
         body: Column(
           children: [
             CustomHeader(
-              title: 'Products',
+              title: languageModel.selectedLanguage == 'en' ? 'Products' : 'مصنوعات',
               onBackPressed: () {
-                // Handle back button press
                 Navigator.of(context).pop();
               },
+              icon: Icons.arrow_back,  // Ensure the icon remains on the left
             ),
             // Categories TabBar below the green area
             Container(
@@ -74,7 +76,11 @@ class _ProductListViewState extends State<ProductListView> with SingleTickerProv
               child: CustomTabBar(
                 controller: _tabController!,
                 tabs: viewModel.categories.map((category) {
-                  return Text(category.categoryName);
+                  return Text(
+                    languageModel.selectedLanguage == 'en'
+                        ? category.categoryName
+                        : category.urCategoryName,
+                  );
                 }).toList(),
                 selectedColor: Color(0xFF0fa065), // Green color for selected tab background
                 unselectedColor: Colors.transparent, // Transparent for unselected tabs
