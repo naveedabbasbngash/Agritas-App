@@ -5,7 +5,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'viewmodels/product_viewmodel.dart';
+import 'viewmodels/language_viewmodel.dart';
 import 'views/product_list_view.dart';
+import 'views/language_selection_view.dart';
 import 'models/product.dart';
 import 'models/category.dart';
 
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
           print("Creating ProductViewModel");  // Print when ViewModel is created
           return ProductViewModel();
         }),
+        ChangeNotifierProvider<LanguageViewModel>(create: (_) => LanguageViewModel()),
       ],
       child: MaterialApp(
         title: 'Haryali Markaz',
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ProductListView(),
+        home: LanguageSelectionView(),
       ),
     );
   }
