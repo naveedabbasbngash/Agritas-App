@@ -15,6 +15,13 @@ class Logger {
     }
   }
 
+  static void warn(String message, {String? tag}) {
+    if (kDebugMode) {
+      final logTag = tag != null ? '[$tag WARN] ' : '[WARN] ';
+      print('${DateTime.now().toIso8601String()} $logTag$message');
+    }
+  }
+
   static void apiResponse(String message, {String? tag}) {
     if (kDebugMode) {
       final logTag = tag != null ? '[$tag API] ' : '[API] ';

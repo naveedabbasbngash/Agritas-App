@@ -1,8 +1,10 @@
+import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
 import 'package:agritas_app/views/product_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/weather_viewmodel.dart';
 import '../viewmodels/language_viewmodel.dart';
+import 'crops_view.dart';
 
 class DashboardView extends StatefulWidget {
   @override
@@ -153,95 +155,111 @@ class _DashboardViewState extends State<DashboardView> {
                           ),
                           SizedBox(height: 10),
                           // Responsive GridView of boxes
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 3 items per row
-                          mainAxisSpacing: 20.0, // Spacing between rows
-                          crossAxisSpacing: 20.0, // Spacing between columns
-                          childAspectRatio: 0.65, // Height is greater than width
-                        ),
-                        itemCount: 6, // Number of buttons
-                        itemBuilder: (context, index) {
-                          final titlesEn = [
-                            'Products',
-                            'Crops',
-                            'Problems',
-                            'Dealers',
-                            'Contact',
-                            'Services'
-                          ];
-                          final titlesUr = [
-                            'مصنوعات',
-                            'فصلیں',
-                            'مسائل',
-                            'ڈیلر',
-                            'رابطہ کریں',
-                            'خدمات'
-                          ];
-                          final icons = [
-                            'assets/images/plantation.png',
-                            'assets/images/plantation.png',
-                            'assets/images/plantation.png',
-                            'assets/images/plantation.png',
-                            'assets/images/plantation.png',
-                            'assets/images/plantation.png',
-                          ];
-                          final colors = [
-                            Colors.orange,
-                            Colors.green,
-                            Colors.purple,
-                            Colors.yellow,
-                            Colors.blue,
-                            Colors.orangeAccent,
-                          ];
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, // 3 items per row
+                              mainAxisSpacing: 20.0, // Spacing between rows
+                              crossAxisSpacing: 20.0, // Spacing between columns
+                              childAspectRatio: 0.65, // Height is greater than width
+                            ),
+                            itemCount: 6, // Number of buttons
+                            itemBuilder: (context, index) {
+                              final titlesEn = [
+                                'Products',
+                                'Crops',
+                                'Problems',
+                                'Dealers',
+                                'Contact',
+                                'Services'
+                              ];
+                              final titlesUr = [
+                                'مصنوعات',
+                                'فصلیں',
+                                'مسائل',
+                                'ڈیلر',
+                                'رابطہ کریں',
+                                'خدمات'
+                              ];
+                              final icons = [
+                                'assets/images/products_icon.png',
+                                'assets/images/crops_image.png',
+                                'assets/images/question_icon.png',
+                                'assets/images/haryali_icon.png',
+                                'assets/images/contact_icon.png',
+                                'assets/images/services_icon.png',
+                              ];
+                              final colors = [
+                                Colors.orange,
+                                Colors.green,
+                                Colors.purple,
+                                Colors.yellow,
+                                Colors.blue,
+                                Colors.orangeAccent,
+                              ];
 
-                          return GestureDetector(
-                            onTap: () {
-                              // Handle the click for each box here
-                              print('Clicked on ${titlesEn[index]}');
-                              switch(index){
-                                case 0:
-                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>ProductListView()),);
-                                 break;
-                                 default:
-                                   print("unknown item clicked");
-                              }
-                              // You can perform navigation, show a dialog, or any other action
-                              // Example: Navigator.pushNamed(context, '/products');
-                            },
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: colors[index],
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Center(
-                                      child: Image.asset(
-                                        icons[index],
-                                        height: 50,
-                                        fit: BoxFit.contain,
+                              return GestureDetector(
+                                onTap: () {
+                                  print('Clicked on ${titlesEn[index]}');
+                                  switch (index) {
+                                    case 0:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ProductListView()),
+                                      );
+                                      break;
+                                    case 1:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => CropView()),
+                                      );
+                                      break;
+                                    default:
+                                      print("unknown item clicked");
+                                  }
+                                },
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: colors[index],
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: Center(
+                                          child: Container(
+                                            height: 70,  // Adjust the size of the white circle
+                                            width: 70,   // Ensure the circle is proportional
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: Image.asset(
+                                                icons[index],
+                                                height: 40,  // Adjust the size of the icon within the circle
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(height: 8), // Space between the box and the text
+                                    Text(
+                                      isUrdu ? titlesUr[index] : titlesEn[index],
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 8), // Space between the box and the text
-                                Text(
-                                  isUrdu ? titlesUr[index] : titlesEn[index],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
+                              );
+                            },
+                          )
                         ],
                       ),
                     ),

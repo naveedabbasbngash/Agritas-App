@@ -21,7 +21,7 @@ class _ProductListViewState extends State<ProductListView> with SingleTickerProv
     // Ensure loadProducts is called on initialization
     Future.microtask(() async {
       final viewModel = Provider.of<ProductViewModel>(context, listen: false);
-      await viewModel.loadProducts();
+      await viewModel.loadProducts(context);
 
       if (viewModel.categories.isNotEmpty && mounted) {
         setState(() {

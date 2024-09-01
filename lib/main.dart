@@ -1,3 +1,5 @@
+import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
+import 'package:agritas_app/views/crops_view.dart';
 import 'package:agritas_app/views/language_selection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +9,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'models/crops.dart';
 import 'viewmodels/product_viewmodel.dart';
 import 'viewmodels/language_viewmodel.dart';
 import 'viewmodels/weather_viewmodel.dart';  // Import the WeatherViewModel
@@ -22,6 +25,11 @@ void main() async {
   await Hive.initFlutter(appDocumentDir.path);
   Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(CropAdapter());
+
+
+  await Hive.openBox<Crop>('cropsBox');
+  await Hive.openBox<Category>('ProductBox');
 
   // Ensure location services are enabled and permissions are granted
   await _initializeLocationServices();
@@ -64,6 +72,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProductViewModel>(create: (_) {
           print("Creating ProductViewModel");
           return ProductViewModel();
+        }),
+        ChangeNotifierProvider<CropsViewModel>(create: (_) {
+          print("Creating ProductViewModel");
+          return CropsViewModel();
         }),
         ChangeNotifierProvider<LanguageViewModel>(create: (_) => LanguageViewModel()),
         ChangeNotifierProvider<WeatherViewModel>(create: (_) => WeatherViewModel()),  // Provide the WeatherViewModel

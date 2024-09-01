@@ -8,6 +8,7 @@ class ProductApi {
   static const String _baseUrl = 'https://www.agritas.com.pk/api/products/';
   static List<Category>? _cachedCategories;
 
+
   static Future<List<Category>> getProducts({bool forceRefresh = false}) async {
     if (_cachedCategories != null && !forceRefresh) {
       Logger.log('Returning cached categories', tag: 'ProductApi');
