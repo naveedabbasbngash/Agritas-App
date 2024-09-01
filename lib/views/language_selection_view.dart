@@ -1,3 +1,4 @@
+import 'package:agritas_app/views/dashboard_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/language_viewmodel.dart';
@@ -32,7 +33,7 @@ class LanguageSelectionView extends StatelessWidget {
         builder: (context, model, child) {
           return Column(
             children: [
-              _buildLogo(),
+              _buildLogo(context),
               SizedBox(height: 50),
               _buildLanguageSelectionBox(context, model),
             ],
@@ -42,9 +43,15 @@ class LanguageSelectionView extends StatelessWidget {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildLogo(BuildContext context) {
+    // Get the height of the screen
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate a responsive top padding, for example, 20% of the screen height
+    final double topPadding = screenHeight * 0.2;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 150.0),
+      padding: EdgeInsets.only(top: topPadding),
       child: Center(
         child: Image.asset(
           'assets/images/language_top_logo.png',
@@ -148,7 +155,7 @@ class LanguageSelectionView extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProductListView()),
+            MaterialPageRoute(builder: (context) => DashboardView()),
           );
         },
         style: ElevatedButton.styleFrom(

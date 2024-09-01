@@ -21,17 +21,25 @@ class ProductViewModel extends ChangeNotifier {
   Future<void> loadProducts() async {
     Logger.log('Loading products...', tag: 'ProductViewModel');
 
+    // Step 1: Check for cached data first
+    List<Category>? cachedCategories = ProductApi.getCachedProducts();
+    if (cachedCategories != null && cachedCategories.isNotEmpty) {
+      Logger.log('Using cached categories for optimistic UI update.', tag: 'ProductViewModel');
+      _categories = cachedCategories;
+      notifyListeners(); // Immediately update the UI with cached data
+    } else {
+      // If no cache, check local storage
+      Logger.log('No cached data found, loading from local storage.', tag: 'ProductViewModel');
+      _categories = await LocalStorage.loadCategories();
+      notifyListeners(); // Update the UI with local storage data if available
+    }
+
+    // Step 2: Fetch fresh data in the background
     try {
-      // Check the connectivity status
       var connectivityResult = await Connectivity().checkConnectivity();
-      if (connectivityResult == ConnectivityResult.none) {
-        // No internet connection, load from local storage
-        Logger.log('No internet connection. Loading products from local storage.', tag: 'ProductViewModel');
-        _categories = await LocalStorage.loadCategories();
-      } else {
-        // Internet connection is available, load from server
-        Logger.log('Internet connection available. Loading products from server.', tag: 'ProductViewModel');
-        final categoriesFromServer = await ProductApi.getProducts();
+      if (connectivityResult != ConnectivityResult.none) {
+        Logger.log('Internet connection available. Fetching fresh data.', tag: 'ProductViewModel');
+        final categoriesFromServer = await ProductApi.getProducts(forceRefresh: true);
         _categories = categoriesFromServer;
 
         // Set the default selected category if not already selected
@@ -39,22 +47,14 @@ class ProductViewModel extends ChangeNotifier {
           _selectedCategory = _categories.first;
         }
 
-        // Save to local storage
-        Logger.log('Saving products to local storage.', tag: 'ProductViewModel');
+        // Save fresh data to local storage
+        Logger.log('Saving fresh products to local storage.', tag: 'ProductViewModel');
         await LocalStorage.saveCategories(_categories);
-      }
 
-      notifyListeners(); // Update the UI
-    } catch (e) {
-      Logger.error('Error loading products: $e', tag: 'ProductViewModel');
-      // Optionally, load from local storage as a fallback in case of an error
-      try {
-        Logger.log('Attempting to load products from local storage after error.', tag: 'ProductViewModel');
-        _categories = await LocalStorage.loadCategories();
-        notifyListeners();
-      } catch (localError) {
-        Logger.error('Error loading products from local storage: $localError', tag: 'ProductViewModel');
+        notifyListeners(); // Update the UI with fresh data
       }
+    } catch (e) {
+      Logger.error('Error fetching fresh products: $e', tag: 'ProductViewModel');
     }
   }
 }
