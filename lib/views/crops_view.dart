@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../viewmodels/crops_viewmodel.dart';
 import '../viewmodels/language_viewmodel.dart';
 import '../widgets/crops_card.dart';
@@ -10,14 +12,19 @@ class CropView extends StatefulWidget {
 }
 
 class _CropViewState extends State<CropView> {
+  bool _isLoading = true;  // Add a loading state
+
   @override
   void initState() {
     super.initState();
 
-    // Ensure loadCrops is called on initialization
+    // Show loading indicator while loading crops
     Future.microtask(() async {
       final viewModel = Provider.of<CropsViewModel>(context, listen: false);
       await viewModel.loadCrops(context);
+      setState(() {
+        _isLoading = false;  // Update loading state
+      });
     });
   }
 
@@ -26,7 +33,8 @@ class _CropViewState extends State<CropView> {
     final viewModel = Provider.of<CropsViewModel>(context);
     final languageModel = Provider.of<LanguageViewModel>(context);
 
-    if (viewModel.crops.isEmpty) {
+    // Show loading indicator if still loading
+    if (_isLoading) {
       return Scaffold(
         backgroundColor: Color(0xFFE1FDF9),
         body: Center(child: CircularProgressIndicator()),
@@ -40,8 +48,7 @@ class _CropViewState extends State<CropView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child:
-        GridView.builder(
+        child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 16.0,
@@ -52,7 +59,7 @@ class _CropViewState extends State<CropView> {
           itemBuilder: (context, index) {
             final crop = viewModel.crops[index];
             return CropCard(
-              image: crop.imgUrl, // This should be the relative URL part
+              image: crop.imgUrl,
               title: languageModel.selectedLanguage == 'en'
                   ? crop.cropName
                   : crop.cropNameUr,
