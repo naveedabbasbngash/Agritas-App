@@ -1,6 +1,9 @@
+import 'package:agritas_app/models/problems.dart';
 import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
+import 'package:agritas_app/viewmodels/problem_viewmodel.dart';
 import 'package:agritas_app/views/crops_view.dart';
 import 'package:agritas_app/views/language_selection_view.dart';
+import 'package:agritas_app/views/problem_view.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +29,13 @@ void main() async {
   Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(CropAdapter());
+  Hive.registerAdapter(ProblemAdapter());
+  Hive.registerAdapter(ProblemCategoryAdapter());
 
 
   await Hive.openBox<Crop>('cropsBox');
   await Hive.openBox<Category>('ProductBox');
+  await Hive.openBox<ProblemCategory>('ProblemBox');
 
   // Ensure location services are enabled and permissions are granted
   await _initializeLocationServices();
@@ -79,6 +85,7 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider<LanguageViewModel>(create: (_) => LanguageViewModel()),
         ChangeNotifierProvider<WeatherViewModel>(create: (_) => WeatherViewModel()),  // Provide the WeatherViewModel
+        ChangeNotifierProvider<ProblemsViewModel>(create: (_) => ProblemsViewModel()),  // Provide the WeatherViewModel
       ],
       child: Consumer<LanguageViewModel>(
         builder: (context, languageViewModel, child) {

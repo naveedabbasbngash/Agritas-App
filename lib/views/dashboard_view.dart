@@ -1,4 +1,6 @@
 import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
+import 'package:agritas_app/views/contact_us_view.dart';
+import 'package:agritas_app/views/problem_view.dart';
 import 'package:agritas_app/views/product_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -213,6 +215,18 @@ class _DashboardViewState extends State<DashboardView> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) => CropView()),
+                                      );
+                                      break;
+                                    case 2:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ProblemsScreen()),
+                                      );
+                                      break;
+                                    case 4:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ContactUsPage()),
                                       );
                                       break;
                                     default:

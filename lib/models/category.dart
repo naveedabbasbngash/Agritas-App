@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 import 'product.dart';
-part '../providers/category_provider.dart';  // This is required for Hive code generation
+part '../providers/category_provider.g.dart';  // This is required for Hive code generation
 
 @HiveType(typeId: 1)
 class Category {

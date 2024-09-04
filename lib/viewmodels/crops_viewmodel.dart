@@ -81,7 +81,7 @@ class CropsViewModel extends ChangeNotifier {
         _errorMessage = 'Network error occurred. Please check your connection.';
         Logger.error('Network error while fetching crops: $e', tag: 'CropsViewModel');
       } catch (e) {
-        _errorMessage = 'Unexpected error occurred. Please try again later.';
+        _errorMessage = 'Offline Mode Active! Check Your Internat Connection!';
         Logger.error('Unexpected error while fetching fresh crops: $e', tag: 'CropsViewModel');
       }
     } catch (e) {

@@ -51,6 +51,8 @@ dependencies:
   flutter_localization: ^0.2.2
   geolocator: ^10.0.0 # Add the latest version of Geolocator for location services
   palette_generator: ^0.3.3+4
+  font_awesome_flutter: ^10.7.0
+  google_fonts: ^6.2.1
 
 #  location: ^6.0.2
 
@@ -105,6 +107,9 @@ flutter:
     - assets/images/maize_test.png
     - assets/images/maze_icon_test.png
     - assets/images/sugarcane_test.png
+    - assets/images/bg_contact_us.png
+    - assets/images/name_icon.png
+    - assets/images/emailicon.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -4,29 +4,17 @@ import 'dart:convert';
 
 import '../models/category.dart';
 import '../models/crops.dart';
+import '../models/problems.dart';
 
 class LocalStorage {
   static const String _categoriesKey = 'categories';
+  static const String _problemCategoryBoxName = 'ProblemBox';
   static Future<List<Category>> loadCategories() async {
-    /*
-    final prefs = await SharedPreferences.getInstance();
-    final String? categoriesJson = prefs.getString(_categoriesKey);
-
-    if (categoriesJson != null) {
-      final List<dynamic> categoriesList = jsonDecode(categoriesJson);
-      return categoriesList.map((json) => Category.fromJson(json)).toList();
-    } else {
-      return [];
-    }*/
-
     var box = await Hive.openBox<Category>('ProductBox');
     return box.values.toList();
   }
 
   static Future<void> saveCategories(List<Category> categories) async {
-/*    final prefs = await SharedPreferences.getInstance();
-    final String categoriesJson = jsonEncode(categories.map((c) => c.toJson()).toList());
-    await prefs.setString(_categoriesKey, categoriesJson);*/
     var box = await Hive.openBox<Category>('ProductBox');
     await box.clear();
     await box.addAll(categories);
@@ -43,5 +31,26 @@ class LocalStorage {
     var box = await Hive.openBox<Crop>('cropsBox');
     await box.clear();
     await box.addAll(crops);
+  }
+
+
+  // Save a list of ProblemCategory objects into Hive
+  static Future<void> saveProblemCategories(List<ProblemCategory> problemCategories) async {
+    // Open the Hive box for ProblemCategory
+    var box = await Hive.openBox<ProblemCategory>(_problemCategoryBoxName);
+
+    // Clear the existing data in the box (if any) before saving new data
+    await box.clear();
+
+    // Add each ProblemCategory into the Hive box
+    for (var category in problemCategories) {
+      await box.add(category);  // Each ProblemCategory will be added
+    }
+  }
+
+  // Retrieve the saved ProblemCategory objects from the local storage (Hive)
+  static List<ProblemCategory> getProblemCategoriesFromLocalStorage() {
+    var box = Hive.box<ProblemCategory>(_problemCategoryBoxName);
+    return box.values.toList().cast<ProblemCategory>();
   }
 }

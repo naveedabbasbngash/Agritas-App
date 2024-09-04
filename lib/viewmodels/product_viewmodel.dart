@@ -71,30 +71,39 @@ class ProductViewModel extends ChangeNotifier {
         await LocalStorage.saveCategories(_categories);
 
         notifyListeners(); // Update the UI with fresh data
+      } on SocketException catch (e) {
+        _errorMessage = 'No internet connection. Showing offline data.';
+        Logger.error('Network error while fetching products: $e', tag: 'ProductViewModel');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_errorMessage!)),
+        );
       } on TimeoutException catch (e) {
         _errorMessage = 'The request timed out. Showing offline data.';
         Logger.error('Timeout while fetching fresh products: $e', tag: 'ProductViewModel');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_errorMessage!)),
+        );
       } on FormatException catch (e) {
         _errorMessage = 'Data format error. Please try again later.';
         Logger.error('Invalid format received from server: $e', tag: 'ProductViewModel');
-      } on SocketException catch (e) {
-        _errorMessage = 'Network error occurred. Please check your connection.';
-        Logger.error('Network error while fetching products: $e', tag: 'ProductViewModel');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_errorMessage!)),
+        );
       } catch (e) {
-        _errorMessage = 'Unexpected error occurred. Please try again later.';
+        _errorMessage = 'Offline Mode Active! Check Your Internat Connection!';
         Logger.error('Unexpected error while fetching fresh products: $e', tag: 'ProductViewModel');
-      }
-    } catch (e) {
-      _errorMessage = 'Error during product loading process. Please try again later.';
-      Logger.error('Error during product loading process: $e', tag: 'ProductViewModel');
-    } finally {
-      notifyListeners(); // Ensure the UI is updated whether data is fetched or an error occurs
-      // Show an error message to the user if one exists
-      if (_errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(_errorMessage!)),
         );
       }
+    } catch (e) {
+      _errorMessage = 'Error during product loading process. Please try again later.';
+      Logger.error('Error during product loading process: $e', tag: 'ProductViewModel');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_errorMessage!)),
+      );
+    } finally {
+      notifyListeners(); // Ensure the UI is updated whether data is fetched or an error occurs
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part '../providers/crops_provider.dart';
+part '../providers/crops_provider.g.dart';
 
 @HiveType(typeId: 2)
 class Crop {
