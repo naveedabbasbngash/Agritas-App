@@ -6,11 +6,13 @@ class CropCard extends StatefulWidget {
   final String image; // This is the URL for the image
   final String title;
   final String description;
+  final Function onTap; // Callback function to navigate to crop detail
 
   const CropCard({
     required this.image,
     required this.title,
     required this.description,
+    required this.onTap, // Adding onTap function to navigate
   });
 
   @override
@@ -31,7 +33,6 @@ class _CropCardState extends State<CropCard> {
       CachedNetworkImageProvider('http://agritas.com.pk/' + widget.image),
     );
 
-    // Get the dominant color and lighten it
     setState(() {
       dominantColor = paletteGenerator.dominantColor?.color.withOpacity(0.7) ?? Colors.white;
     });
@@ -39,47 +40,48 @@ class _CropCardState extends State<CropCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      color: dominantColor ?? Colors.white, // Use the dominant color or white if it's not yet available
-      elevation: 4.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => widget.onTap(), // Navigate to detail view when tapped
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        color: dominantColor ?? Colors.white, // Use dominant color or white
+        elevation: 4.0,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 4.0),
-            Text(
-              widget.description,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.black87,
+              SizedBox(height: 4.0),
+              Text(
+                widget.description,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black87,
+                ),
+                maxLines: 2, // Limit to 2 lines
+                overflow: TextOverflow.ellipsis, // Show '...' for overflow
               ),
-              maxLines: 2, // Limit to 3 lines
-              overflow: TextOverflow.ellipsis, // Add '...' at the end if the text overflows
-            ),
-            SizedBox(height: 16.0),
-
-            Expanded(
-              child:
-              CachedNetworkImage(
-                imageUrl: 'http://agritas.com.pk/' + widget.image,
-                fit: BoxFit.contain,
-                placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              SizedBox(height: 16.0),
+              Expanded(
+                child: CachedNetworkImage(
+                  imageUrl: 'http://agritas.com.pk/' + widget.image,
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
-            ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );

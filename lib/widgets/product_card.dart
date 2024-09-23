@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/product.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/language_viewmodel.dart';
+import '../views/product_details_view.dart'; // Import ProductDetailsView
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -14,24 +15,35 @@ class ProductCard extends StatelessWidget {
     final languageViewModel = Provider.of<LanguageViewModel>(context);
     final isUrdu = languageViewModel.selectedLanguage == 'ur';
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        color: Colors.white,
-        elevation: 6,
-        child: Container(
-          height: 180,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-          child: Row(
-            children: [
-              _buildProductImage(),
-              SizedBox(width: 16.0),
-              _buildProductDetails(context, isUrdu),
-              _buildArrowIcon(isUrdu),
-            ],
+    return GestureDetector(
+      onTap: () {
+        // Navigate to ProductDetailsView when tapped
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsView(product: product),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          color: Colors.white,
+          elevation: 6,
+          child: Container(
+            height: 180,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Row(
+              children: [
+                _buildProductImage(),
+                SizedBox(width: 16.0),
+                _buildProductDetails(context, isUrdu),
+                _buildArrowIcon(isUrdu),
+              ],
+            ),
           ),
         ),
       ),

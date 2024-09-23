@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/crops_viewmodel.dart';
 import '../viewmodels/language_viewmodel.dart';
 import '../widgets/crops_card.dart';
+import 'crop_details_view.dart';
 
 class CropView extends StatefulWidget {
   @override
@@ -66,18 +67,32 @@ class _CropViewState extends State<CropView> {
             childAspectRatio: 0.7,
           ),
           itemCount: viewModel.crops.length,
-          itemBuilder: (context, index) {
-            final crop = viewModel.crops[index];
-            return CropCard(
-              image: crop.imgUrl,
-              title: languageModel.selectedLanguage == 'en'
-                  ? crop.cropName
-                  : crop.cropNameUr,
-              description: languageModel.selectedLanguage == 'en'
-                  ? crop.description
-                  : crop.descriptionUr,
-            );
-          },
+            itemBuilder: (context, index) {
+              final crop = viewModel.crops[index];
+              return CropCard(
+                image: crop.imgUrl,
+                title: languageModel.selectedLanguage == 'en'
+                    ? crop.cropName
+                    : crop.cropNameUr,
+                description: languageModel.selectedLanguage == 'en'
+                    ? crop.description
+                    : crop.descriptionUr,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CropDetailPage(
+                        titleEn: crop.cropName,      // Pass English title
+                        titleUr: crop.cropNameUr,      // Pass Urdu title
+                        descriptionEn: crop.description,  // Pass English description
+                        descriptionUr: crop.descriptionUr,  // Pass Urdu description
+                        image: crop.imgUrl,            // Pass the image URL
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
         ),
       ),
     );
