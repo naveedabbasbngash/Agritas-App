@@ -1,6 +1,10 @@
+import 'package:agritas_app/models/dealer.dart';
 import 'package:agritas_app/models/problems.dart';
+import 'package:agritas_app/models/services.dart';
 import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
+import 'package:agritas_app/viewmodels/dealer_viewmodel.dart';
 import 'package:agritas_app/viewmodels/problem_viewmodel.dart';
+import 'package:agritas_app/viewmodels/services_viewmodel.dart';
 import 'package:agritas_app/views/crops_view.dart';
 import 'package:agritas_app/views/language_selection_view.dart';
 import 'package:agritas_app/views/problem_view.dart';
@@ -31,11 +35,15 @@ void main() async {
   Hive.registerAdapter(CropAdapter());
   Hive.registerAdapter(ProblemAdapter());
   Hive.registerAdapter(ProblemCategoryAdapter());
+  Hive.registerAdapter(DealerAdapter());
+  Hive.registerAdapter(ServiceAdapter());
 
 
   await Hive.openBox<Crop>('cropsBox');
   await Hive.openBox<Category>('ProductBox');
   await Hive.openBox<ProblemCategory>('ProblemBox');
+  await Hive.openBox<Dealer>('DealerBox');
+  await Hive.openBox<Service>('ServiceBox');
 
   // Ensure location services are enabled and permissions are granted
   await _initializeLocationServices();
@@ -85,7 +93,9 @@ class MyApp extends StatelessWidget {
         }),
         ChangeNotifierProvider<LanguageViewModel>(create: (_) => LanguageViewModel()),
         ChangeNotifierProvider<WeatherViewModel>(create: (_) => WeatherViewModel()),  // Provide the WeatherViewModel
-        ChangeNotifierProvider<ProblemsViewModel>(create: (_) => ProblemsViewModel()),  // Provide the WeatherViewModel
+        ChangeNotifierProvider<ProblemsViewModel>(create: (_) => ProblemsViewModel()),  // Provide the ProblemsViewModel
+        ChangeNotifierProvider<DealerViewModel>(create: (_) => DealerViewModel()),  // Provide the DealerViewModel
+        ChangeNotifierProvider<ServiceViewModel>(create: (_) => ServiceViewModel()),  // Provide the DealerViewModel
       ],
       child: Consumer<LanguageViewModel>(
         builder: (context, languageViewModel, child) {

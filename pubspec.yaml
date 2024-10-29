@@ -110,6 +110,8 @@ flutter:
     - assets/images/bg_contact_us.png
     - assets/images/name_icon.png
     - assets/images/emailicon.png
+    - assets/images/services_card_bg.png
+    - assets/images/serivesdealers_bg.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,7 +1,8 @@
-import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
 import 'package:agritas_app/views/contact_us_view.dart';
+import 'package:agritas_app/views/dealers_listview.dart';
 import 'package:agritas_app/views/problem_view.dart';
 import 'package:agritas_app/views/product_list_view.dart';
+import 'package:agritas_app/views/services_listview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/weather_viewmodel.dart';
@@ -223,10 +224,25 @@ class _DashboardViewState extends State<DashboardView> {
                                         MaterialPageRoute(builder: (context) => ProblemsScreen()),
                                       );
                                       break;
+
+                                    case 3:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => DealerListView()),
+                                      );
+                                      
+                                      break;
                                     case 4:
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(builder: (context) => ContactUsPage()),
+                                      );
+                                      break;
+
+                                    case 5:
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ServiceListView()),
                                       );
                                       break;
                                     default:

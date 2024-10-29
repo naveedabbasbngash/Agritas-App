@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/language_viewmodel.dart';
 import '../viewmodels/problem_viewmodel.dart';
 import '../widgets/problem_card.dart';
+import 'cat_problems_list.dart';
 
 class ProblemsScreen extends StatefulWidget {
   @override
@@ -10,18 +11,18 @@ class ProblemsScreen extends StatefulWidget {
 }
 
 class _ProblemsScreenState extends State<ProblemsScreen> {
-  bool _isLoading = true;  // Add a loading state
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
 
-    // Show loading indicator while loading problems
+    // Load problems asynchronously
     Future.microtask(() async {
       final viewModel = Provider.of<ProblemsViewModel>(context, listen: false);
-      await viewModel.loadProblems(context);  // Load problems from API
+      await viewModel.loadProblems(context);
       setState(() {
-        _isLoading = false;  // Update loading state
+        _isLoading = false;
       });
     });
   }
@@ -31,7 +32,6 @@ class _ProblemsScreenState extends State<ProblemsScreen> {
     final viewModel = Provider.of<ProblemsViewModel>(context);
     final languageModel = Provider.of<LanguageViewModel>(context);
 
-    // Show loading indicator if still loading
     if (_isLoading) {
       return Scaffold(
         backgroundColor: Color(0xFFE1FDF9),
@@ -39,7 +39,6 @@ class _ProblemsScreenState extends State<ProblemsScreen> {
       );
     }
 
-    // Show the problem categories
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -58,19 +57,41 @@ class _ProblemsScreenState extends State<ProblemsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,  // 2 items per row
+            crossAxisCount: 2,
             mainAxisSpacing: 16.0,
             crossAxisSpacing: 16.0,
             childAspectRatio: 0.7,
           ),
-          itemCount: viewModel.problemCategories.length,  // Use data from ViewModel
+          itemCount: viewModel.problemCategories.length,
           itemBuilder: (context, index) {
             final category = viewModel.problemCategories[index];
+
             return ProblemCard(
               image: category.cat_image_url,
               title: languageModel.selectedLanguage == 'en'
                   ? category.pc_name_en
                   : category.pc_name_ur,
+              onTap: () {
+                if (category.problems.isNotEmpty) {
+                  // Navigate to ProblemsListScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProblemsListScreen(
+                        problems: category.problems,
+                        categoryTitle: languageModel.selectedLanguage == 'en'
+                            ? category.pc_name_en
+                            : category.pc_name_ur,
+                      ),
+                    ),
+                  );
+                } else {
+                  // Show a SnackBar if there are no problems available
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('No problems available for this category')),
+                  );
+                }
+              },
             );
           },
         ),

@@ -4,10 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 class ProblemCard extends StatefulWidget {
   final String image; // Image URL
   final String title;
+  final VoidCallback onTap; // onTap callback for navigation
 
   const ProblemCard({
     required this.image,
     required this.title,
+    required this.onTap,  // Accept the onTap function
   });
 
   @override
@@ -24,7 +26,7 @@ class _ProblemCardState extends State<ProblemCard> with SingleTickerProviderStat
 
     // Initialize the animation controller
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 00), // Animation duration
+      duration: const Duration(milliseconds: 100), // Animation duration
       vsync: this,
     );
 
@@ -35,6 +37,14 @@ class _ProblemCardState extends State<ProblemCard> with SingleTickerProviderStat
         curve: Curves.easeInOut,
       ),
     );
+
+    // Add listener to detect when the animation is complete
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.reverse();  // Reverse animation after completion
+        widget.onTap();  // Trigger navigation or action after the animation
+      }
+    });
   }
 
   @override
@@ -47,10 +57,6 @@ class _ProblemCardState extends State<ProblemCard> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),  // Start the scale animation on tap down
-      onTapUp: (_) {
-        _controller.reverse(); // Reverse the animation on tap up
-        // Here you can add any onTap action like navigating to another page
-      },
       onTapCancel: () => _controller.reverse(), // Reverse the animation if the tap is canceled
       child: ScaleTransition(
         scale: _scaleAnimation,

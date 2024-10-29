@@ -1,3 +1,5 @@
+import 'package:agritas_app/models/dealer.dart';
+import 'package:agritas_app/models/services.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -53,4 +55,32 @@ class LocalStorage {
     var box = Hive.box<ProblemCategory>(_problemCategoryBoxName);
     return box.values.toList().cast<ProblemCategory>();
   }
+
+
+  static Future<List<Dealer>> loadDealers() async {
+    var box = await Hive.openBox<Dealer>('DealerBox');
+    return box.values.toList();
+  }
+
+  static Future<void> saveDealers(List<Dealer> dealer) async {
+    var box = await Hive.openBox<Dealer>('DealerBox');
+    await box.clear();
+    await box.addAll(dealer);
+  }
+
+
+  static Future<List<Service>> loadServices() async {
+    var box = await Hive.openBox<Service>('ServiceBox');
+    return box.values.toList();
+  }
+
+  static Future<void> saveServices(List<Service> services) async {
+    var box = await Hive.openBox<Service>('ServiceBox');
+    await box.clear();
+    await box.addAll(services);
+  }
+
+
+
+
 }
