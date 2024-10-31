@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import '../models/weather.dart';
@@ -10,12 +11,16 @@ class WeatherViewModel extends ChangeNotifier {
   String? cityName;
   String currentDate = DateFormat('dd, MMMM, yyyy').format(DateTime.now());
 
+  Future<void> initializeWeather() async {
+    await fetchLocationAndWeather();
+  }
+
   Future<void> fetchWeather(String city) async {
     try {
       Logger.log('Fetching weather for $city', tag: 'WeatherViewModel');
       weather = await WeatherApi.getWeather(city);
       Logger.log('Weather fetched: ${weather?.condition}, ${weather?.temperature}°C, Feels like: ${weather?.feelsLike}°C', tag: 'WeatherViewModel');
-      notifyListeners();  // Notify listeners after the weather is fetched
+      notifyListeners(); // Notify listeners after the weather is fetched
     } catch (e) {
       Logger.error('Failed to fetch weather: $e', tag: 'WeatherViewModel');
     }
@@ -59,8 +64,14 @@ class WeatherViewModel extends ChangeNotifier {
 
   Future<String?> _getCityNameFromPosition(Position position) async {
     try {
-      String city = "Peshawar"; // Replace with actual implementation
-      return city;
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isNotEmpty) {
+        String? city = placemarks.first.locality ?? placemarks.first.subAdministrativeArea ?? "Unknown location";
+        Logger.log('City name obtained: $city', tag: 'WeatherViewModel');
+        return city;
+      }
+      Logger.warn('No placemarks found for the position', tag: 'WeatherViewModel');
+      return null;
     } catch (e) {
       Logger.error('Failed to get city name from position: $e', tag: 'WeatherViewModel');
       return null;

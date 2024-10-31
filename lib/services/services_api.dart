@@ -8,32 +8,33 @@ class ServicesApi {
   static const String _baseUrl = 'https://www.agritas.com.pk/api/products/fetch_service_types';
   static List<Service>? _cachedServices;
 
-  /// Fetch services from API, with caching and optional force refresh
+  /// Fetch services and cities from API, with caching and optional force refresh
   static Future<List<Service>> getServices({bool forceRefresh = false}) async {
-    // If cached data is available and no force refresh is requested, return cached data
     if (_cachedServices != null && !forceRefresh) {
       Logger.log('Returning cached services', tag: 'ServicesApi');
       return _cachedServices!;
     }
 
-    final url = Uri.parse('$_baseUrl');
-    Logger.log('Fetching services from $url', tag: 'ServicesApi');
+    final url = Uri.parse(_baseUrl);
+    Logger.log('Fetching services and cities from $url', tag: 'ServicesApi');
 
     try {
       final response = await http.get(url);
 
-      // Log the response status and body for debugging
       Logger.apiResponse('Response status: ${response.statusCode}', tag: 'ServicesApi');
       Logger.apiResponse('Response body: ${response.body}', tag: 'ServicesApi');
 
-      // If the request is successful, parse the response
       if (response.statusCode == 200) {
-        final List<dynamic> servicesJson = json.decode(response.body)['service_types'];
-        Logger.log('Parsed ${servicesJson.length} services', tag: 'ServicesApi');
-        _cachedServices = servicesJson.map((json) => Service.fromJson(json)).toList();
+        final data = json.decode(response.body);
 
-        // Save the fetched services to local storage
-        Logger.log('Saving services to local storage.', tag: 'ServicesApi');
+        // Parse cities once and pass to each Service instance
+        final List<dynamic> citiesJson = data['cities'];
+        final List<dynamic> servicesJson = data['service_types'];
+
+        _cachedServices = servicesJson.map((json) => Service.fromJson(json, citiesJson)).toList();
+
+        // Save the fetched data to local storage
+        Logger.log('Saving services and cities to local storage.', tag: 'ServicesApi');
         await LocalStorage.saveServices(_cachedServices!);
 
         return _cachedServices!;

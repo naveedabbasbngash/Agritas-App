@@ -53,6 +53,8 @@ dependencies:
   palette_generator: ^0.3.3+4
   font_awesome_flutter: ^10.7.0
   google_fonts: ^6.2.1
+  google_maps_flutter: ^2.9.0
+  geocoding: ^3.0.0
 
 #  location: ^6.0.2
 

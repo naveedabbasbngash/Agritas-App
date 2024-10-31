@@ -12,6 +12,7 @@
 
 
     <application
+        android:enableOnBackInvokedCallback="true"
         android:label="agritas_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -42,6 +43,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCpEd9drb6WaOmsUAlO9ngvK0E5rNUk78c"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and
@@ -54,4 +58,5 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
 </manifest>

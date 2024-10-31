@@ -4,6 +4,7 @@ import 'package:agritas_app/models/services.dart';
 import 'package:agritas_app/viewmodels/crops_viewmodel.dart';
 import 'package:agritas_app/viewmodels/dealer_viewmodel.dart';
 import 'package:agritas_app/viewmodels/problem_viewmodel.dart';
+import 'package:agritas_app/viewmodels/service_provider_viewmodel.dart';
 import 'package:agritas_app/viewmodels/services_viewmodel.dart';
 import 'package:agritas_app/views/crops_view.dart';
 import 'package:agritas_app/views/language_selection_view.dart';
@@ -17,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'models/crops.dart';
+import 'models/servics_providers.dart';
 import 'viewmodels/product_viewmodel.dart';
 import 'viewmodels/language_viewmodel.dart';
 import 'viewmodels/weather_viewmodel.dart';  // Import the WeatherViewModel
@@ -37,6 +39,9 @@ void main() async {
   Hive.registerAdapter(ProblemCategoryAdapter());
   Hive.registerAdapter(DealerAdapter());
   Hive.registerAdapter(ServiceAdapter());
+  Hive.registerAdapter(OfficerAdapter ());
+  Hive.registerAdapter(CityAdapter()); // Register the City adapter
+
 
 
   await Hive.openBox<Crop>('cropsBox');
@@ -44,6 +49,7 @@ void main() async {
   await Hive.openBox<ProblemCategory>('ProblemBox');
   await Hive.openBox<Dealer>('DealerBox');
   await Hive.openBox<Service>('ServiceBox');
+  await Hive.openBox<Service>('OfficerBox');
 
   // Ensure location services are enabled and permissions are granted
   await _initializeLocationServices();
@@ -96,6 +102,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProblemsViewModel>(create: (_) => ProblemsViewModel()),  // Provide the ProblemsViewModel
         ChangeNotifierProvider<DealerViewModel>(create: (_) => DealerViewModel()),  // Provide the DealerViewModel
         ChangeNotifierProvider<ServiceViewModel>(create: (_) => ServiceViewModel()),  // Provide the DealerViewModel
+        ChangeNotifierProvider<OfficerViewModel>(create: (_) => OfficerViewModel()),  // Provide the OfficerViewModel
       ],
       child: Consumer<LanguageViewModel>(
         builder: (context, languageViewModel, child) {
